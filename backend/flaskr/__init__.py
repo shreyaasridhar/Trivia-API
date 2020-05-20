@@ -54,7 +54,7 @@ def create_app(test_config=None):
             abort(404)
         return jsonify({
             "success": True,
-            "categories": category,
+            "categories": {c.id: c.type for c in category},
             "total_categories": len(selection)
         })
     '''
@@ -132,6 +132,7 @@ def create_app(test_config=None):
   only question that include that string within their question. 
   Try using the word "title" to start. 
   '''
+  # @app.route(,methods=["POST"])
 
     '''
   @TODO: 
@@ -141,7 +142,18 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-    '''
+    @app.route('/categories/<int:category_id>/questions')
+    def questions_category(category_id):
+        questions = Question.query.order_by(Question.id).filter(
+            Question.category == category_id).all()
+        current_questions = paginate(request, questions)
+        return jsonify({
+            "success": True,
+            "questions": current_questions,
+            'total_questions': len(current_questions),
+            "current_category": category_id
+        })
+        '''
   @TODO: 
   Create a POST endpoint to get questions to play the quiz. 
   This endpoint should take category and previous question parameters 
