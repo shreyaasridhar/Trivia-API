@@ -58,16 +58,16 @@ def create_app(test_config=None):
             "total_categories": len(selection)
         })
     '''
-  @TODO: 
-  Create an endpoint to handle GET requests for questions, 
-  including pagination (every 10 questions). 
-  This endpoint should return a list of questions, 
-  number of total questions, current category, categories. 
+  @TODO:
+  Create an endpoint to handle GET requests for questions,
+  including pagination (every 10 questions).
+  This endpoint should return a list of questions,
+  number of total questions, current category, categories.
 
   TEST: At this point, when you start the application
   you should see questions and categories generated,
   ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
+  Clicking on the page numbers should update the questions.
   '''
     @app.route('/questions')
     def retrieve_questions():
@@ -84,11 +84,11 @@ def create_app(test_config=None):
             "current_category": None
         })
     '''
-  @TODO: 
-  Create an endpoint to DELETE question using a question ID. 
+  @TODO:
+  Create an endpoint to DELETE question using a question ID.
 
   TEST: When you click the trash icon next to a question, the question will be removed.
-  This removal will persist in the database and when you refresh the page. 
+  This removal will persist in the database and when you refresh the page.
   '''
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delete_questions(question_id):
@@ -101,18 +101,29 @@ def create_app(test_config=None):
             "success": True
         })
     '''
-  @TODO: 
-  Create an endpoint to POST a new question, 
-  which will require the question and answer text, 
+  @TODO:
+  Create an endpoint to POST a new question,
+  which will require the question and answer text,
   category, and difficulty score.
 
-  TEST: When you submit a question on the "Add" tab, 
+  TEST: When you submit a question on the "Add" tab,
   the form will clear and the question will appear at the end of the last page
-  of the questions list in the "List" tab.  
+  of the questions list in the "List" tab.
   '''
-
-    '''
-  @TODO: 
+    @app.route('/questions', methods=["POST"])
+    def create_question():
+        data = request.get_json()
+        print(data)
+        question = data['question']
+        answer = data['answer']
+        difficulty = data['difficulty']
+        category = data['category']
+        Question(question=question, answer=answer,
+                 difficulty=difficulty, category=category).insert()
+        return jsonify({
+            "success": True
+        })
+        '''@TODO: 
   Create a POST endpoint to get questions based on a search term. 
   It should return any questions for whom the search term 
   is a substring of the question. 
