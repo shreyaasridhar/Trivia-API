@@ -75,7 +75,6 @@ def create_app(test_config=None):
         current_question = paginate(request, selection)
         if len(current_question) == 0:
             abort(404)
-        print(current_question[0])
         return jsonify({
             "success": True,
             "questions": current_question,
@@ -95,7 +94,7 @@ def create_app(test_config=None):
         question = Question.query.filter(
             Question.id == question_id).one_or_none()
         if question == None:
-            abort(400)
+            abort(422)
         question.delete()
         return jsonify({
             "success": True
@@ -206,7 +205,7 @@ def create_app(test_config=None):
     def not_found(error):
         return jsonify({
             'success': False,
-            "message": 'Resouce not found',
+            "message": 'Resource not found',
             "error": 404
         }), 404
 
@@ -223,7 +222,7 @@ def create_app(test_config=None):
         return jsonify({
             "success": False,
             "error": 400,
-            "message": "bad request"
+            "message": "Bad request"
         }), 400
 
     return app
