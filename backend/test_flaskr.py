@@ -78,10 +78,9 @@ class TriviaTestCase(unittest.TestCase):
     # Test for DELETE '/questions/<question_id>'
 
     def test_delete_question(self):
-        res = self.client().delete('/questions/6')
+        res = self.client().delete('/questions/25')
         data = json.loads(res.data)
-        question = Question.query.filter(Question.id == 24).one_or_none()
-        print(question, data)
+        question = Question.query.filter(Question.id == 25).one_or_none()
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
         self.assertEqual(question, None)
@@ -101,25 +100,38 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
 
-    # Test for POST '/questions' to searchterm
+    # Test for POST '/questions' to searchTerm
+
     def test_search_question_results(self):
         res = self.client().post('/questions', json={'searchTerm': 'Tom'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['total_books'])
+        self.assertTrue(data['total_questions'])
         self.assertEqual(len(data['questions']), 1)
+
     # Test for GET '/catergories/{category_id}/questions'
 
     def test_get_questions_by_category(self):
         res = self.client().get('/catergories/5/questions')
         data = json.loads(res.data)
+        print(data)
+        self.assertEqual(res.status_code, 200)
         self.assertTrue(data["questions"])
         self.assertTrue(data["total_questions"])
         self.assertTrue(data["categories"])
-        self.assertEqual(data["current_category"], None)
+        self.assertEqual(data["current_category"], 5)
+
     # Test for POST '/quizzes'
+
+    def test_quiz(self):
+        res = self.client().post('/quizzes',
+                                 json={"quiz_category": {"type": "Science", "id": 1}, "previous_questions": []})
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data["question"])
 
 
 # Make the tests conveniently executable
