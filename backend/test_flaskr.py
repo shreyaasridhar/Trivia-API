@@ -78,9 +78,9 @@ class TriviaTestCase(unittest.TestCase):
     # Test for DELETE '/questions/<question_id>'
 
     def test_delete_question(self):
-        res = self.client().delete('/questions/25')
+        res = self.client().delete('/questions/27')
         data = json.loads(res.data)
-        question = Question.query.filter(Question.id == 25).one_or_none()
+        question = Question.query.filter(Question.id == 27).one_or_none()
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
         self.assertEqual(question, None)
@@ -105,7 +105,6 @@ class TriviaTestCase(unittest.TestCase):
     def test_search_question_results(self):
         res = self.client().post('/questions', json={'searchTerm': 'Tom'})
         data = json.loads(res.data)
-
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
@@ -116,11 +115,9 @@ class TriviaTestCase(unittest.TestCase):
     def test_get_questions_by_category(self):
         res = self.client().get('/categories/5/questions')
         data = json.loads(res.data)
-        print(data)
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data["questions"])
         self.assertTrue(data["total_questions"])
-        self.assertTrue(data["categories"])
         self.assertEqual(data["current_category"], 5)
 
     # Test for POST '/quizzes'

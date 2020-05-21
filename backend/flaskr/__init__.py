@@ -112,7 +112,6 @@ def create_app(test_config=None):
     @app.route('/questions', methods=["POST"])
     def create_question():
         data = request.get_json()
-        print(data)
         if 'searchTerm' in data:
             search = data['searchTerm']
             selection = Question.query.order_by(Question.id).filter(
