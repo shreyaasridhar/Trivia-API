@@ -114,7 +114,7 @@ class TriviaTestCase(unittest.TestCase):
     # Test for GET '/catergories/{category_id}/questions'
 
     def test_get_questions_by_category(self):
-        res = self.client().get('/catergories/5/questions')
+        res = self.client().get('/categories/5/questions')
         data = json.loads(res.data)
         print(data)
         self.assertEqual(res.status_code, 200)
