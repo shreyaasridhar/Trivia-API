@@ -2,7 +2,6 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-
 from flaskr import create_app
 from models import setup_db, Question, Category
 
@@ -78,9 +77,9 @@ class TriviaTestCase(unittest.TestCase):
     # Test for DELETE '/questions/<question_id>'
 
     def test_delete_question(self):
-        res = self.client().delete('/questions/27')
+        res = self.client().delete('/questions/6')
         data = json.loads(res.data)
-        question = Question.query.filter(Question.id == 27).one_or_none()
+        question = Question.query.filter(Question.id == 6).one_or_none()
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
         self.assertEqual(question, None)
@@ -100,6 +99,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['success'])
 
+    def test_422_add_question(self):
+        res = self.client().post('/questions')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertEqual(data["message"], "Unprocessable request")
+
     # Test for POST '/questions' to searchTerm
 
     def test_search_question_results(self):
@@ -109,6 +115,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
         self.assertEqual(len(data['questions']), 1)
+
+    def test_422_search(self):
+        res = self.client().post('/questions')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertEqual(data["message"], "Unprocessable request")
 
     # Test for GET '/catergories/{category_id}/questions'
 
@@ -120,6 +133,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data["total_questions"])
         self.assertEqual(data["current_category"], 5)
 
+    def test_404_get_paginated_beyond_valid_page(self):
+        res = self.client().get('/categories/5/questions?page=1000')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'Resource not found')
+
     # Test for POST '/quizzes'
 
     def test_quiz(self):
@@ -129,6 +149,13 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data["question"])
+
+    def test_404_quiz_without_data(self):
+        res = self.client().post('/quizzes')
+        data = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertEqual(data["message"], "Unprocessable request")
 
 
 # Make the tests conveniently executable
