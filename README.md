@@ -281,3 +281,32 @@ The tests are updated as the functionality of the app is updated.
 ```
 
 ### POST /quizzes
+
+- General
+  - Randomly gives the next question to be solved, excluding the ones from the set of previous questions.
+  - Returns question details and a success value.
+  - Sample request: `curl -X POST "http://127.0.0.1:5000/quizzes" -H "Content-type: application/json" -d '{"quiz_category": {"type": "Science", "id": 1}, "previous_questions": []}'`
+
+```
+{
+  "question": {
+    "answer": "Alexander Fleming",
+    "category": 1,
+    "difficulty": 3,
+    "id": 21,
+    "question": "Who discovered penicillin?"
+  },
+  "success": true
+}
+sh
+```
+
+## Deployment N/A
+
+### Authors
+
+Coach, [Caryn](https://github.com/cmccarthy15)
+
+### Acknowledgements
+
+Udacity Nanodegree!
