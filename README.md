@@ -298,7 +298,6 @@ The tests are updated as the functionality of the app is updated.
   },
   "success": true
 }
-sh
 ```
 
 ## Deployment N/A
